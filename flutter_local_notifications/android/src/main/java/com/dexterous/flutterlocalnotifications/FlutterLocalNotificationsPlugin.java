@@ -164,7 +164,7 @@ public class FlutterLocalNotificationsPlugin implements MethodCallHandler, Plugi
         Intent intent = getLaunchIntent(context);
         intent.setAction(SELECT_NOTIFICATION);
         intent.putExtra(PAYLOAD, notificationDetails.payload);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationDetails.id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationDetails.id, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
         DefaultStyleInformation defaultStyleInformation = (DefaultStyleInformation) notificationDetails.styleInformation;
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, notificationDetails.channelId)
                 .setContentTitle(defaultStyleInformation.htmlFormatTitle ? fromHtml(notificationDetails.title) : notificationDetails.title)
@@ -1137,7 +1137,7 @@ public class FlutterLocalNotificationsPlugin implements MethodCallHandler, Plugi
 
     private void cancelNotification(Integer id, String tag) {
         Intent intent = new Intent(applicationContext, ScheduledNotificationReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(applicationContext, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(applicationContext, id, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         AlarmManager alarmManager = getAlarmManager(applicationContext);
         alarmManager.cancel(pendingIntent);
         NotificationManagerCompat notificationManager = getNotificationManager(applicationContext);
